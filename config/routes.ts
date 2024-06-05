@@ -19,14 +19,14 @@
   },
   {
     path: '/',
-    name: 'wizard',
+    name: 'main',
     layout: false,
     hideInMenu: false,
     hideNav: false,
     routes: [
       {
         path: '/',
-        component: './wizard',
+        component: './main',
         access: 'normalRoute',
         deployMode: ['tfs', 'tos'],
         exact: true,
