@@ -422,11 +422,33 @@
   }
 }
 
+.tagContainer {
+  max-width: 600px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: space-around;
+  .tag {
+    margin: 3px 8px;
+  }
+}
+
+.tagContainerTable {
+  display: flex;
+  align-items: center;
+}
+
 .tag {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   background: #D9D9D91A;
   border: 1px solid #323C4840;
   border-radius: 80px;
-  margin-right: 8px;
+  margin: 0 8px;
   padding: 1px 8px;
 }
 

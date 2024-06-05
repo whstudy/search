@@ -454,10 +454,17 @@ const SearchList = (props) => {
               title: '标签',
               dataIndex: 'tag',
               key: 'tag',
-              render: (val: any) => 
-                <Popover placement="top" content={<div>{val?.map(tag => <span className={styles.tag}>{tag}</span>)}</div>}>
+              render: (val: any) =>
+                /*<Tooltip placement="top" defaultOpen={true} title={<div className={styles.tagContainer}>
+                  {val?.map(tag => <span className={styles.tag}>{tag}</span>)}
+                </div>}>
                   <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
-                </Popover>,
+                </Tooltip>*/
+                <Popover placement="top" content={<div className={styles.tagContainer}>
+                  {val?.map(tag => <span title={tag} className={styles.tag}>{tag}</span>)}
+                </div>}>
+                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span title={tag} className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
+                </Popover>
             },
             {
               title: <FormattedMessage id="storage.gateways.createTime" defaultMessage="创建时间" />,
