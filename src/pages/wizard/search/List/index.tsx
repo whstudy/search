@@ -9,7 +9,8 @@ import {
   DatePicker,
   Select,
   Modal,
-  Tooltip
+  Tooltip,
+  Popover
 } from 'antd';
 import { FormattedMessage } from 'umi';
 import React, { useRef, useState, useEffect } from 'react';
@@ -397,6 +398,11 @@ const SearchList = (props) => {
               ),
             },
             {
+              title: '版本号',
+              dataIndex: 'version',
+              key: 'version',
+            },
+            {
               title: '大小',
               dataIndex: 'size',
               key: 'size',
@@ -445,11 +451,20 @@ const SearchList = (props) => {
               sortDirections: ['descend', 'ascend'],
             },
             {
+              title: '标签',
+              dataIndex: 'tag',
+              key: 'tag',
+              render: (val: any) => 
+                <Popover placement="top" content={<div>{val?.map(tag => <span className={styles.tag}>{tag}</span>)}</div>}>
+                  <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
+                </Popover>,
+            },
+            {
               title: <FormattedMessage id="storage.gateways.createTime" defaultMessage="创建时间" />,
               dataIndex: 'create_time',
               key: 'create_time',
               sorter: true,
-              renderText: (val: number) => `${moment(val).format('YYYY-MM-DD HH:mm:ss')}`,
+              render: (val: number) => `${moment(val).format('YYYY-MM-DD HH:mm:ss')}`,
             },
           ]}
           pagination={{
