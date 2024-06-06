@@ -260,9 +260,6 @@ const SearchList = (props) => {
               </Form.Item>
   
               <Space>
-                <Form.Item label={'对象名称'} name={'name'}>
-                  <Input/>
-                </Form.Item>
                 <Form.Item label={'对象大小'}>
                   <Input.Group compact>
                     <Form.Item name={'size_operator'} style={{marginBottom: 0}}>
@@ -279,6 +276,20 @@ const SearchList = (props) => {
                     </Form.Item>
                   </Input.Group>
                 </Form.Item>
+
+                <Form.Item label={'对象名称'} name={'name'}>
+                  <Input/>
+                </Form.Item>
+
+                <Form.Item name={'nameType'} initialValue={0}>
+                  <Select options={[
+                    {label: `分词匹配`, value: 0},
+                    {label: `完全匹配`, value: 1},
+                    {label: `前缀匹配`, value: 2},
+                    {label: `后缀匹配`, value: 3},
+                  ]}/>
+                </Form.Item>
+                
                 <Form.Item label={'创建时间'} name={'time'}>
                   <RangePicker showTime={true}/>
                 </Form.Item>
