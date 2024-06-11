@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from '../index.less';
-import {Input, message, Space, Spin, Typography} from "antd";
+import {Input, message, Select, Space, Spin, Typography} from "antd";
 import {dsmShareLink} from "@/services/dsm/objSearch";
 import {FormattedMessage} from "umi";
 
@@ -50,6 +50,23 @@ const Share: React.FC<routeProps> = ({
     })
   },[])
 
+  const unitOptions = [
+    {
+      label: '分钟',
+      value: 60,
+    },
+    {
+      label: '小时',
+      value: 60*60,
+    },
+    {
+      label: '天',
+      value: 60*60*24,
+    },
+  ]
+
+  const shareTime = 60
+
   return (
     <Spin spinning={loading}>
       <Space direction="vertical">
@@ -60,18 +77,24 @@ const Share: React.FC<routeProps> = ({
         <div className={styles.shareContainer}>
           <span className={styles.shareLabel}>链接</span>
           <span className={styles.shareContent}>
+            <span className={styles.shareTop}>
+              <Input.Group compact className={styles.shareTime}>
                 <Input onChange={getShareLink} className={styles.shareInput} defaultValue={1}/>
-                <span>天后失效</span>
-                <div className={styles.shareLink}>{shareLink}</div>
-                <Typography.Paragraph
-                  copyable={{
-                    text: shareLink,
-                    icon: [<></>, <></>],
-                  }}
-                >
-                  复制链接
-                </Typography.Paragraph>
-              </span>
+                <Select options={unitOptions} defaultValue={shareTime}/>
+              </Input.Group>
+
+              <span>天后失效</span>
+            </span>
+            <div className={styles.shareLink}>{shareLink}</div>
+            <Typography.Paragraph
+              copyable={{
+                text: shareLink,
+                icon: [<></>, <></>],
+              }}
+            >
+              复制链接
+            </Typography.Paragraph>
+          </span>
         </div>
       </Space>
     </Spin>
