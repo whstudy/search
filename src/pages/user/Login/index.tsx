@@ -120,9 +120,9 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    if(!!localStorage.getItem('token')){
+ /*   if(!!localStorage.getItem('token')){
       history.push('/')
-    }
+    }*/
     const { query } = history.location;
     const { p, e, source, type } = query as { redirect: string };
     e && setLocale(e, true);

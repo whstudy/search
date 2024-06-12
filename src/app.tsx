@@ -149,9 +149,9 @@ export const request: RequestConfig = {
 
 // fix dynamically redirect due to pending deployMode, it invokes everytime change route
 export function onRouteChange({ location }) {
-/*  const deployMode = localStorage.getItem('deployMode') || 'tfs';
+  const deployMode = localStorage.getItem('deployMode') || 'tfs';
   const globalConfig = JSON.parse(localStorage.getItem('globalConfig') || '{}');
-  const pathName = location.pathname;*/
+  const pathName = location.pathname;
   /*if (pathName === '/storage') {
     history.push(DynamicallyRedirectPath[deployMode][pathName]);
   }
