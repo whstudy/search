@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from '../index.less';
-import {Input, message, Select, Space, Spin, Typography} from "antd";
+import {Form, Input, message, Select, Space, Spin, Typography} from "antd";
 import {appObjectShareLinkGet} from "@/services/dsm/terraSearch";
-import {FormattedMessage} from "umi";
 
 type routeProps = {
   objParams: any;
@@ -14,15 +13,17 @@ type routeProps = {
 const Share: React.FC<routeProps> = ({
                                        objParams,
                                      }) => {
+
+  const [form] = Form.useForm();
   const [shareLink, setShareLink] = useState<any>();
   const [loading, setLoading] = useState<any>();
-
-  const getShareLink = async (e) => {
+  
+  const getShareLink = async (e, allFields) => {
     setLoading(true);
-    console.log(e.target.value)
+    console.log(allFields)
     const _objParams = {
       ...objParams,
-      duration: e.target.value*24*60*60,
+      duration: allFields.size*allFields.unit,
     }
     try{
       const res: any = await appObjectShareLinkGet(_objParams, {});
@@ -43,11 +44,7 @@ const Share: React.FC<routeProps> = ({
   }
 
   useEffect(()=>{
-    getShareLink({
-      target: {
-        value: 1
-      }
-    })
+    getShareLink(null,{size: 1, unit: 60})
   },[])
 
   const unitOptions = [
@@ -78,10 +75,26 @@ const Share: React.FC<routeProps> = ({
           <span className={styles.shareLabel}>链接</span>
           <span className={styles.shareContent}>
             <span className={styles.shareTop}>
-              <Input.Group compact className={styles.shareTime}>
+              {/*<Input.Group compact className={styles.shareTime}>
                 <Input onChange={getShareLink} className={styles.shareInput} defaultValue={1}/>
                 <Select options={unitOptions} defaultValue={shareTime}/>
-              </Input.Group>
+              </Input.Group>*/}
+
+              <Form
+                onValuesChange={getShareLink}
+                form={form}
+              >
+                <Form.Item noStyle>
+                  <Input.Group compact className={styles.shareTime}>
+                    <Form.Item name={'size'} initialValue={1} noStyle>
+                      <Input className={styles.shareInput}/>
+                    </Form.Item>
+                    <Form.Item name={'unit'} initialValue={60} noStyle>
+                      <Select options={unitOptions}/>
+                    </Form.Item>
+                  </Input.Group>
+                </Form.Item>
+              </Form>
 
               <span>天后失效</span>
             </span>

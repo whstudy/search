@@ -1,4 +1,5 @@
 export default {
+  'menu.main': '主页',
   'menu.login': '登录',
   'menu.wizard': '配置向导',
   'menu.dashboard': '信息板',
