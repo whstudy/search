@@ -50,10 +50,10 @@ const WizardHeaderRight: React.FC = () => {
       JSON.stringify(licenseNodes) !== '[]'
     ) {
       Modal.destroyAll(); // 手动更改浏览器地址时关闭弹框
-      if (showTag === '0') {
+      /*if (showTag === '0') {
         localStorage.setItem('visitTime', '1');
         history.replace('/expired');
-      }
+      }*/
     }
   }, [history.location.pathname]);
 

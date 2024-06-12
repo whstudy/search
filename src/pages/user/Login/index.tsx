@@ -100,7 +100,7 @@ const Login: React.FC = () => {
         const { redirect } = query as { redirect: string };
         let redirectUrl = redirect; // 当从配置向导处退出登录，但集群已通过其他方式跳过配置向导时，不再进入配置向导
         if (redirect?.includes('wizard')) {
-          redirectUrl = !stateOpenwizard ? '/dashboard' : '/wizard';
+          redirectUrl = !stateOpenwizard ? '/search' : '/wizard';
         }
         history.push(redirectUrl || '/');
         return;
@@ -120,6 +120,9 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
+    if(!!localStorage.getItem('token')){
+      history.push('/')
+    }
     const { query } = history.location;
     const { p, e, source, type } = query as { redirect: string };
     e && setLocale(e, true);

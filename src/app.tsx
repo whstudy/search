@@ -149,16 +149,16 @@ export const request: RequestConfig = {
 
 // fix dynamically redirect due to pending deployMode, it invokes everytime change route
 export function onRouteChange({ location }) {
-  const deployMode = localStorage.getItem('deployMode') || 'tfs';
+/*  const deployMode = localStorage.getItem('deployMode') || 'tfs';
   const globalConfig = JSON.parse(localStorage.getItem('globalConfig') || '{}');
-  const pathName = location.pathname;
-  if (pathName === '/storage') {
+  const pathName = location.pathname;*/
+  /*if (pathName === '/storage') {
     history.push(DynamicallyRedirectPath[deployMode][pathName]);
   }
   //  跳过配置向导后不可再访问配置向导页面
   if (pathName.includes('wizard') && !globalConfig.stateOpenwizard) {
     history.goBack();
-  }
+  }*/
 }
 
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
