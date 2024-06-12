@@ -32,31 +32,6 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
-  const fetchInitialInfo = async () => {
-    const [currentUser, clusters] = await Promise.all([
-      initialState?.fetchUserInfo?.(),
-      initialState?.fetchClusterInfo?.(),
-    ]);
-
-    const currentCluster = clusters?.find((c) => c.is_local);
-    const deployMode = localStorage.getItem('deployMode')?.split('_') || ['tfs'];
-
-    // 保存复制能力标识，供未授权弹框使用
-    localStorage.setItem('hasRepCapability', String(isHasRepCapability));
-    const globalConfig = JSON.parse(localStorage.getItem('globalConfig') || '{}');
-
-    if (currentUser) {
-      await setInitialState((s) => ({
-        ...s,
-        currentUser,
-        currentCluster,
-        clusters,
-        deployMode,
-        globalConfig,
-      }));
-    }
-  };
-
   const formatDeployMode = useCallback((mode: string) => {
     let result = 'tfs';
     const modes = ['tfs', 'tos', 'tfs_tos'];
@@ -83,8 +58,8 @@ const Login: React.FC = () => {
         //   defaultMessage: '登录成功！',
         // });
         // message.success(defaultLoginSuccessMessage);
-        const user = data?.user;
-        const jwt = data!.jwt!;
+        const user = {username: data?.username};
+        const token = data!.token!;
         const licenseCluster = data?.license_cluster;
         const licenseNodes = data?.license_nodes;
         const featurePACS = data?.feature_pacs;
@@ -113,12 +88,11 @@ const Login: React.FC = () => {
         };
 
         localStorage.setItem('user', JSON.stringify(currentUser));
-        localStorage.setItem('token', jwt);
+        localStorage.setItem('token', token);
         localStorage.setItem('visitTime', '0'); // 进入页面，用于 RightContent 组件
         localStorage.setItem('deployMode', deployMode);
         localStorage.setItem('globalConfig', JSON.stringify(globalConfig));
         localStorage.removeItem('wizardObjConfigStatus');
-        await fetchInitialInfo();
 
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;

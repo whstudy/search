@@ -102,10 +102,7 @@ const GlobalHeaderRight: React.FC = () => {
     if (localStorage.getItem('deployRedirect')) {
       history.replace('/user/login');
     }
-    if (!statePwdChanged) {
-      // 是否为初次登录，修改默认密码
-      history.replace('/initpwd');
-    } else if (openwizard) {
+    if (openwizard) {
       // 增加向导配置跳转逻辑
       history.replace('/wizard');
     } else {
