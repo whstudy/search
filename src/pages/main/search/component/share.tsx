@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from '../index.less';
 import {Input, message, Select, Space, Spin, Typography} from "antd";
-import {dsmShareLink} from "@/services/dsm/objSearch";
+import {appObjectShareLinkGet} from "@/services/dsm/terraSearch";
 import {FormattedMessage} from "umi";
 
 type routeProps = {
@@ -25,7 +25,7 @@ const Share: React.FC<routeProps> = ({
       duration: e.target.value*24*60*60,
     }
     try{
-      const res: any = await dsmShareLink(_objParams, {});
+      const res: any = await appObjectShareLinkGet(_objParams, {});
       if(res.code === '2'){
         message.error(
           res.msg,

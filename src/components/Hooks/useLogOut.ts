@@ -1,4 +1,4 @@
-import { portalUserLogoutGet } from '@/services/dsm/login';
+import { appLogout } from '@/services/dsm/terraSearch';
 import { useModel, history } from 'umi';
 import { stringify } from 'querystring';
 
@@ -11,7 +11,7 @@ export default () => {
 
   const logout = async (callback?: () => void) => {
     try {
-      const res = await portalUserLogoutGet({ name: currentUser?.name as string });
+      const res = await appLogout({ name: currentUser?.name as string });
       if (res?.success) {
         callback && callback();
         const { query = {}, pathname } = history.location;

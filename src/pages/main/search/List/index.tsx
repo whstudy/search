@@ -16,7 +16,7 @@ import { FormattedMessage } from 'umi';
 import React, { useRef, useState, useEffect } from 'react';
 import styles from '../index.less';
 import moment from 'moment';
-import {dsmObjectDelete, dsmObjectGet, dsmObjBucket, dsmDownload} from '@/services/dsm/objSearch';
+import {appObjectPage, appBucketListGet, appObjectDownloadGet} from '@/services/dsm/terraSearch';
 import {formatUnit} from "@/utils";
 import Share from "../component/share";
 import ProCard from "@ant-design/pro-card";
@@ -41,44 +41,24 @@ const SearchList = (props) => {
   const [current, setCurrent] = useState(1);
 
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
-  const [deleteParams,setDeleteParams] = useState<any>()
 
   const [downloadArr, setDownloadArr] = useState<any>();
 
   const [objParams, setObjParams] = useState()
 
   const getDataSource = async () => {
-    const res: any = await dsmObjectGet(paramsObject, {});
+    const res: any = await appObjectPage(paramsObject, {});
     if(res.code === '2'){
       message.error(
         res.msg,
       );
     }
-    setDataSource(res.data.list)
+    setDataSource(res.data?.list)
     setTotal(res.data.total)
   }
 
   const onReset = () => {
     form.resetFields();
-  }
-  
-  // 删除
-  async function handleDelete() {
-    const hideMsg = message.loading(
-      <FormattedMessage id="component.router" defaultMessage="正在删除" />,
-      0,
-    );
-    const res = await dsmObjectDelete(deleteParams);
-    hideMsg();
-    if(res.code === "0"){
-      res?.message?.success(res.msg);
-      setTimeout(()=>{
-        getDataSource()
-      },500);
-    }else{
-      res?.message?.error(res.msg);
-    }
-    setConfirmVisible(false)
   }
 
   const onFinish = (values) => {
@@ -106,7 +86,7 @@ const SearchList = (props) => {
 
   const getBucket = async () => {
     const bucketListTemp: any = []
-    const bucketRes: any = await dsmObjBucket({}, {});
+    const bucketRes: any = await appBucketListGet({}, {});
     for (let i = 0; i < bucketRes.data.length; i++) {
       bucketListTemp.push({
         label: `${bucketRes.data[i].name}${bucketRes.data[i].owner?`（租户：${bucketRes.data[i].owner}）`:''}`,
@@ -204,7 +184,7 @@ const SearchList = (props) => {
   const objDownLoad = async (e) => {
     const _downloadArr = e.record || downloadArr
     for(const record of _downloadArr){
-      const result: any = await dsmDownload(
+      const result: any = await appObjectDownloadGet(
         {
           name: record.name,
           bucket: record.bucket,

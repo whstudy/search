@@ -6,13 +6,11 @@ import { Space, message, Modal } from 'antd';
 import { SettingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import Avatar from '../RightContent/AvatarDropdown';
-import Cluster from '../RightContent/ClusterDropdown';
 import styles from './index.less';
 import { isNotEmpty } from '@/utils';
 import IconFont from '../IconFont';
 
 export type SiderTheme = 'light' | 'dark';
-const JobSyncInterval = 10 * 1000;
 
 const Help: React.FC = () => {
   return (
@@ -38,53 +36,6 @@ const Setting: React.FC = () => {
 const WizardHeaderRight: React.FC = () => {
   const intl = useIntl();
   const { initialState } = useModel('@@initialState');
-  const { currentCluster } = initialState || {};
-  const clusterId = currentCluster?.id || '';
-  const { globalJobQueue, fetchJobsByIds, FinishedJobStatus, showMsgBox, deleteJobByIds } =
-    useModel('job');
-
-  useEffect(() => {
-    let timerId;
-
-    const fetch = async (cluster: string, jobs: string) => {
-      const items = await fetchJobsByIds(cluster, jobs);
-      _.forEach(items, (item: API.queryjobstatus) => {
-        if (FinishedJobStatus.includes(item?.job_status)) {
-          deleteJobByIds([item?.id as number]);
-          showMsgBox(message, _.lowerCase(item?.job_status), item, intl);
-        }
-      });
-    };
-
-    const timer = () => {
-      if (timerId) {
-        clearInterval(timerId);
-      }
-      timerId = setInterval(() => {
-        if (isNotEmpty(globalJobQueue) && globalJobQueue.length > 0) {
-          fetch(clusterId as string, globalJobQueue.join(','));
-        }
-      }, JobSyncInterval);
-    };
-
-    if (globalJobQueue.length > 0) {
-      timer();
-    } else {
-      clearInterval(timerId);
-    }
-
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [
-    clusterId,
-    globalJobQueue,
-    FinishedJobStatus,
-    showMsgBox,
-    fetchJobsByIds,
-    deleteJobByIds,
-    intl,
-  ]);
 
   useEffect(() => {
     const licenseInfo = initialState?.currentUser?.licenseCluster;

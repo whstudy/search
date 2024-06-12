@@ -8,8 +8,8 @@ import { FormattedMessage, history, useIntl, useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import {
-  portalLoginConfigGetConfigureGet,
-} from '@/services/dsm/login';
+  appLogin,
+} from '@/services/dsm/terraSearch';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import useLogOut from '../Hooks/useLogOut';
 
@@ -36,7 +36,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       } else if (key === 'settings') {
         setModalVisible(true);
         setSpinning(true);
-        const res = await portalLoginConfigGetConfigureGet();
+        const res = await appLogin();
         if (res.success) {
           const { LOGIN_LOCK_COUNT, LOGIN_LOCK_TIME, LOGIN_OBSERVATION_TIME } = res.data!;
           formRef.current?.setFieldsValue({

@@ -5,10 +5,9 @@ import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from '
 import * as Lodash from 'lodash';
 import { Base64 } from 'js-base64';
 import Footer from '@/components/Footer';
-import { portalLogin } from '@/services/dsm/login';
+import { appLogin } from '@/services/dsm/terraSearch';
 
 import styles from './index.less';
-import { dsmRelationshipCapabilityGet } from '@/services/dsm/replication';
 import { setLocale } from '@@/plugin-locale/localeExports';
 import { useLocalStorageState } from 'ahooks';
 const LoginMessage: React.FC<{
@@ -24,13 +23,6 @@ const LoginMessage: React.FC<{
   />
 );
 
-// 判断是否具备复制能力
-const fetchRepCapability = async (cluster_id) => {
-  const repCapabilityRes = await dsmRelationshipCapabilityGet({
-    cluster_id,
-  });
-  return repCapabilityRes?.data?.relationship_creation;
-};
 
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -50,7 +42,6 @@ const Login: React.FC = () => {
     const deployMode = localStorage.getItem('deployMode')?.split('_') || ['tfs'];
 
     // 保存复制能力标识，供未授权弹框使用
-    const isHasRepCapability = await fetchRepCapability(currentCluster?.id);
     localStorage.setItem('hasRepCapability', String(isHasRepCapability));
     const globalConfig = JSON.parse(localStorage.getItem('globalConfig') || '{}');
 
@@ -81,7 +72,7 @@ const Login: React.FC = () => {
     localStorage.removeItem('deployRedirect');
     setSubmitting(true);
     try {
-      const result = await portalLogin({
+      const result = await appLogin({
         username: values.username,
         password: Base64.encode(values.password),
       });

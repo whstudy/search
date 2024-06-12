@@ -6,7 +6,6 @@ import { history, getLocale } from 'umi';
 import type { Context } from 'umi-request';
 import RightContent from '@/components/RightContent';
 // import Footer from '@/components/Footer';
-import { dsmClustersGetClustersGet as getClusters } from '@/services/dsm/cluster';
 import { message, notification } from 'antd';
 import { showMessage } from '@/utils';
 import { DynamicallyRedirectPath } from '@/utils/route-helper';
@@ -34,13 +33,10 @@ const queryCurrentUser = () => {
 
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  clusters?: API.querycluster[];
-  currentCluster?: API.querycluster;
   currentUser?: API.CurrentUser;
   globalConfig?: API.GlobalConfig;
   deployMode?: string[];
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
-  fetchClusterInfo?: () => Promise<API.querycluster[] | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -51,28 +47,15 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  const fetchClusterInfo = async () => {
-    try {
-      const { data } = await getClusters();
-      return data;
-    } catch (error) {
-      // throw error;
-    }
-    return undefined;
-  };
 
   if (history.location.pathname !== loginPath) {
-    const [currentUser, clusters] = await Promise.all([fetchUserInfo(), fetchClusterInfo()]);
+    const currentUser = await fetchUserInfo();
     const deployMode = localStorage.getItem('deployMode')?.split('_') || ['tfs'];
     const globalConfig = JSON.parse(localStorage.getItem('globalConfig') || '{}');
-    const currentCluster = clusters?.find((c) => c.is_local);
     return {
       fetchUserInfo,
-      fetchClusterInfo,
       settings: {},
       currentUser,
-      currentCluster,
-      clusters,
       deployMode,
       globalConfig,
     };
@@ -80,7 +63,6 @@ export async function getInitialState(): Promise<{
 
   return {
     fetchUserInfo,
-    fetchClusterInfo,
     settings: {},
   };
 }

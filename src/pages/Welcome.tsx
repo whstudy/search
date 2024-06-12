@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import Icon from '@ant-design/icons';
 import { Card, Button, Divider } from 'antd';
-import { useAccess, Access, useModel } from 'umi';
+import { useAccess, Access } from 'umi';
 import { ReactComponent as DemoIcon } from '@/assets/svg/data-circle.svg';
 import logo from '@/assets/icons/icon-128x128.png';
 import IconFont from '@/components/IconFont';
@@ -10,35 +10,11 @@ import RightSider from '@/components/RightSider';
 import RightDrawer from '@/components/RightDrawer';
 
 import DoubleConfirm from '@/components/DoubleConfirm';
-import useAsyncCallback from './common/useAsyncCallback';
-import PathSelect from '@/components/PathSelect';
 
 const DemoWrapper = () => <DemoIcon width={50} height={50} />;
 
 export default (): React.ReactNode => {
-  const { clusters, fetchClusters } = useModel('cluster');
   const access = useAccess();
-
-  const ClustersList = useMemo(
-    () =>
-      clusters?.map((c: any) => {
-        return (
-          <li key={c.id}>
-            {c.name}: {c.status}
-          </li>
-        );
-      }),
-    [clusters],
-  );
-
-  useEffect(() => {
-    const fetch = async () => {
-      await fetchClusters();
-    };
-    fetch();
-  }, [fetchClusters]);
-
-  const onClose = () => {};
 
   const [visible, setVisible] = useState(false);
   const [visibleDrawer, setVisibleDrawer] = useState(false);
@@ -52,19 +28,12 @@ export default (): React.ReactNode => {
   //   console.log('call refresh', success, job);
   // });
 
-  const { start, polling, success, done } = useAsyncCallback();
-  useEffect(() => {
-    if (done) {
-      console.log('call refresh', done);
-    }
-  }, [done]);
 
   return (
     <PageContainer>
       <Card>
         <Icon component={DemoWrapper} />
         <img src={logo} style={{ display: 'none' }} />
-        {ClustersList}
         <IconFont type="icon-menu-storage" />
         <IconFont type="iconfileshare" />
       </Card>
@@ -184,15 +153,10 @@ export default (): React.ReactNode => {
       </Button>
 
       <Divider />
-      <p>success: {success.toString()}</p>
-      <p>done: {done.toString()}</p>
-      <button onClick={() => start(128)}>{polling ? 'polling' : 'start'}</button>
 
       <Divider />
       <p>{path}</p>
-      <PathSelect value={path} onChange={(s) => setPath(s)} />
       <p>{cpath}</p>
-      <PathSelect value={cpath} onChange={(s) => setCpath(s)} combobox />
     </PageContainer>
   );
 };
