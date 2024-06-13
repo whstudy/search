@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { StrictMode } from 'react';
 import Search from './search'
 import styles from './index.less';
 import { Layout, Steps } from 'antd';

@@ -43,6 +43,20 @@ const Login: React.FC = () => {
     return result;
   }, []);
 
+  const fetchInitialInfo = async () => {
+    const currentUser = await initialState?.fetchUserInfo?.();
+
+    const deployMode = localStorage.getItem('deployMode')?.split('_') || ['tfs'];
+
+    if (currentUser) {
+      await setInitialState((s) => ({
+        ...s,
+        currentUser,
+        deployMode,
+      }));
+    }
+  };
+  
   const handleSubmit = async (values: API.LoginParams) => {
     localStorage.removeItem('deployRedirect');
     setSubmitting(true);
@@ -93,7 +107,8 @@ const Login: React.FC = () => {
         localStorage.setItem('deployMode', deployMode);
         localStorage.setItem('globalConfig', JSON.stringify(globalConfig));
         localStorage.removeItem('wizardObjConfigStatus');
-
+        await fetchInitialInfo();
+        
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
