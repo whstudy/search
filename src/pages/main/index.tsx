@@ -3,7 +3,7 @@ import Search from './search'
 import styles from './index.less';
 import { Layout, Steps } from 'antd';
 // import { Header, Sider } from 'antd/lib/layout/layout';
-import WizardHeader from '@/components/WizardHeader';
+import LnHeader from '@/components/Header';
 
 const { Header, Sider, Content } = Layout;
 const { Step } = Steps;
@@ -22,7 +22,7 @@ const Index: React.FC = () => {
 
       <Layout className={styles.searchBody}>
         <Header className={styles.headerwrapper}>
-          <WizardHeader />
+          <LnHeader />
         </Header>
         <Layout>
           <Content className={styles.wizardContent}><Search /></Content>

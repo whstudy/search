@@ -33,7 +33,7 @@ const Setting: React.FC = () => {
   );
 };
 
-const WizardHeaderRight: React.FC = () => {
+const LnHeader: React.FC = () => {
   const intl = useIntl();
   const { initialState } = useModel('@@initialState');
 
@@ -65,11 +65,9 @@ const WizardHeaderRight: React.FC = () => {
     <div className={styles.header}>
       <Space className={styles.lef}>
         <div className={styles.header_logo} id="logo">
-          <a>
-            <img src="/logo-white.svg" alt="logo" />
-          </a>
+          <img src="/lenovo-white.svg" alt="logo" />
+          <div>TerraSearch</div>
         </div>
-        <div className={styles.featureName}>智能检索</div>
       </Space>
 
       <Space className={styles.rightContent}>
@@ -82,4 +80,4 @@ const WizardHeaderRight: React.FC = () => {
     </div>
   );
 };
-export default WizardHeaderRight;
+export default LnHeader;
