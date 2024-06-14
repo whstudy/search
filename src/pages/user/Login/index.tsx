@@ -1,6 +1,6 @@
 import { Alert, message, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
+import ProForm, {ProFormDependency, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import * as Lodash from 'lodash';
 import { Base64 } from 'js-base64';
@@ -62,16 +62,19 @@ const Login: React.FC = () => {
     setSubmitting(true);
     try {
       const result = await appLogin({
+        role: values.role,
         username: values.username,
-        password: Base64.encode(values.password),
+        password: Base64.encode(values.password||``),
+        access_key: values.access_key,
+        secret_key: Base64.encode(values.secret_key||``),
       });
       const { data } = result;
       if ((result as any).success) {
-        // const defaultLoginSuccessMessage = intl.formatMessage({
-        //   id: 'pages.login.success',
-        //   defaultMessage: '登录成功！',
-        // });
-        // message.success(defaultLoginSuccessMessage);
+        const defaultLoginSuccessMessage = intl.formatMessage({
+          id: 'pages.login.success',
+          defaultMessage: '登录成功！',
+        });
+        message.success(defaultLoginSuccessMessage);
         const user = {username: data?.username};
         const token = data!.token!;
         const licenseCluster = data?.license_cluster;
@@ -125,11 +128,12 @@ const Login: React.FC = () => {
       message.error(result.msg);
       setUserLoginState(result);
     } catch (error) {
-      // const defaultloginFailureMessage = intl.formatMessage({
-      //   id: 'pages.login.failure',
-      //   defaultMessage: '登录失败，请重试！',
-      // });
-      // message.error(defaultloginFailureMessage);
+      const defaultloginFailureMessage = intl.formatMessage({
+        id: 'pages.login.failure',
+        defaultMessage: '登录失败，请重试！',
+      });
+      message.error(defaultloginFailureMessage);
+      console.log(error)
     }
     setSubmitting(false);
   };
@@ -169,9 +173,9 @@ const Login: React.FC = () => {
         </div>
       ) : (
         <div className={styles.container}>
-          <div className={styles.lang} data-lang>
+          {/*<div className={styles.lang} data-lang>
             {SelectLang && <SelectLang />}
-          </div>
+          </div>*/}
           <div className={styles.content}>
             <div className={styles.top}>
               <div className={styles.header}>
@@ -179,14 +183,25 @@ const Login: React.FC = () => {
                   <div>
                     <img src="lenovo.svg" alt="" className={styles.lenovo} />
                   </div>
-                  <img alt="logo" className={styles.logo} src="/logo-font.svg" />
+                  {/*<img alt="logo" className={styles.logo} src="/logo-font.svg" />*/}
+                  <div className={styles.logoFont}>
+                    TerraSearch
+                  </div>
                 </Link>
               </div>
             </div>
 
             <div className={styles.main}>
+              <div className={styles.loginTitle}>
+                <hr/>
+                <div className={styles.loginTitleText}>
+                  登录  
+                </div>
+                <hr/>
+              </div>
               <ProForm
                 initialValues={{
+                  role: 1,
                   autoLogin: true,
                   username: '',
                   password: '',
@@ -221,6 +236,14 @@ const Login: React.FC = () => {
                   />
                 )}
 
+                <ProFormSelect
+                  allowClear={false}
+                  name={`role`}
+                  options={[
+                    {value: 1, label: `普通用户`},
+                    {value: 2, label: `管理员`}
+                  ]}
+                />
                 <ProFormText
                   name="username"
                   // fieldProps={{
@@ -243,28 +266,75 @@ const Login: React.FC = () => {
                     },
                   ]}
                 />
-                <ProFormText.Password
-                  name="password"
-                  // fieldProps={{
-                  //   size: 'large',
-                  //   prefix: <LockOutlined className={styles.prefixIcon} />,
-                  // }}
-                  placeholder={intl.formatMessage({
-                    id: 'pages.login.password.placeholder',
-                    defaultMessage: '密码: admin',
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      message: (
-                        <FormattedMessage
-                          id="pages.login.password.required"
-                          defaultMessage="请输入密码！"
-                        />
-                      ),
-                    },
-                  ]}
-                />
+                <ProFormDependency name={['role']}>
+                  {(depValue) => {
+                    if (depValue?.role===1) {
+                      return (
+                        <>
+                          <ProFormText
+                            name="access_key"
+                            // fieldProps={{
+                            //   size: 'large',
+                            //   prefix: <LockOutlined className={styles.prefixIcon} />,
+                            // }}
+                            placeholder={intl.formatMessage({
+                              id: 'pages.login.AK.placeholder',
+                              defaultMessage: '请输入AK',
+                            })}
+                            rules={[
+                              {
+                                required: true,
+                                message: (
+                                  <FormattedMessage
+                                    id="pages.login.password.required"
+                                    defaultMessage="请输入密码！"
+                                  />
+                                ),
+                              },
+                            ]}
+                          />
+                          <ProFormText
+                            name="secret_key"
+                            placeholder={intl.formatMessage({
+                              id: 'pages.login.SK.placeholder',
+                              defaultMessage: '请输入SK',
+                            })}
+                            rules={[
+                              {
+                                required: true,
+                                message: (
+                                  <FormattedMessage
+                                    id="pages.login.password.required"
+                                    defaultMessage="请输入密码！"
+                                  />
+                                ),
+                              },
+                            ]}
+                          />
+                        </>
+                      );
+                    } else {
+                      return <ProFormText
+                        name="password"
+                        placeholder={intl.formatMessage({
+                          id: 'pages.login.password.placeholder',
+                          defaultMessage: '请输入密码',
+                        })}
+                        rules={[
+                          {
+                            required: true,
+                            message: (
+                              <FormattedMessage
+                                id="pages.login.password.required"
+                                defaultMessage="请输入密码！"
+                              />
+                            ),
+                          },
+                        ]}
+                      />;
+                    }
+                  }}
+                </ProFormDependency>
               </ProForm>
             </div>
           </div>

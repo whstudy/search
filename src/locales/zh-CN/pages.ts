@@ -5,9 +5,11 @@ export default {
   'pages.login.accountLogin.errorMessage': '错误的用户名和密码',
   'pages.login.failure': '登录失败，请重试！',
   'pages.login.success': '登录成功！',
-  'pages.login.username.placeholder': '用户名',
+  'pages.login.username.placeholder': '请输入用户名',
   'pages.login.username.required': '用户名是必填项！',
-  'pages.login.password.placeholder': '密码',
+  'pages.login.password.placeholder': '请输入密码',
+  'pages.login.AK.placeholder': '请输入AK',
+  'pages.login.SK.placeholder': '请输入SK',
   'pages.login.password.required': '密码是必填项！',
   'pages.login.failure.lock': '当前账户已被锁定，请60秒后再试。',
 

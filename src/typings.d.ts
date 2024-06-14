@@ -40,9 +40,16 @@ declare namespace API {
   };
 
   type LoginParams = {
-    name?: string;
-    username?: string;
-    password?: string;
+    /** 用户身份， 管理员-administrator，普通用户-user */
+    role: string;
+    /** 用户名 */
+    username: string;
+    /** 密码，使用base64编码后传递 */
+    password: string;
+    /** 用户的access_key */
+    access_key: string;
+    /** 用户的secret_key,使用base64编码后传递 */
+    secret_key: string;
   };
 
   type CurrentUser = {

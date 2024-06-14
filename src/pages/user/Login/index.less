@@ -48,7 +48,6 @@
 .content {
   display: flex;
   flex: 1;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 32px 0;
@@ -70,7 +69,6 @@
 .top {
   display: flex;
   justify-content: center;
-  width: 100%;
   margin-bottom: 20px;
 }
 
@@ -88,7 +86,11 @@
 .logo {
   height: 50px;
 }
-
+.logoFont {
+  font-size: 58px;
+  font-weight: bolder;
+  color: white;
+}
 .title {
   position: relative;
   top: 2px;
@@ -106,9 +108,21 @@
 }
 
 .main {
+  .loginTitle {
+    margin-bottom: 32px;
+    display: flex;
+    font-size: 26px;
+    align-items: center;
+    hr {
+      width: 112px;
+    }
+    .loginTitleText {
+      margin: 0 9px;
+    }
+  }
+  color: white;
   width: 304px;
-  margin: 0 auto;
-  margin-bottom: 125px;
+  margin-left: 160px;
 
   @media screen and (max-width: @screen-sm) {
     width: 95%;
