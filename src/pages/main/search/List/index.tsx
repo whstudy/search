@@ -452,7 +452,7 @@ const SearchList = (props) => {
                   <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Tooltip>*/
                 <Popover placement="top" content={<div className={styles.tagContainer}>
-                  {val?.map(tag => <span key={tag} title={tag} className={styles.tag}>{tag}</span>)}
+                  {val?.map((tag, index) => <span key={index} title={tag} className={styles.tag}>{tag}</span>)}
                 </div>}>
                   <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} title={tag} className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Popover>
