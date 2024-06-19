@@ -117,10 +117,11 @@ const Login: React.FC = () => {
         const { query } = history.location;
         const { redirect } = query as { redirect: string };
         let redirectUrl = redirect; // 当从配置向导处退出登录，但集群已通过其他方式跳过配置向导时，不再进入配置向导
-        if (redirect?.includes('wizard')) {
-          redirectUrl = !stateOpenwizard ? '/search' : '/wizard';
+        if(values.role === `user`){
+          history.push('/search');  
+        } else {
+          history.push('/cluster');
         }
-        history.push(redirectUrl || '/');
         return;
       }
       // 如果失败去设置用户错误信息
@@ -201,7 +202,7 @@ const Login: React.FC = () => {
               </div>
               <ProForm
                 initialValues={{
-                  role: 1,
+                  role: `user`,
                   autoLogin: true,
                   username: '',
                   password: '',
@@ -240,8 +241,8 @@ const Login: React.FC = () => {
                   allowClear={false}
                   name={`role`}
                   options={[
-                    {value: 1, label: `普通用户`},
-                    {value: 2, label: `管理员`}
+                    {value: `user`, label: `普通用户`},
+                    {value: `administrator`, label: `管理员`}
                   ]}
                 />
                 <ProFormText
@@ -268,7 +269,7 @@ const Login: React.FC = () => {
                 />
                 <ProFormDependency name={['role']}>
                   {(depValue) => {
-                    if (depValue?.role===1) {
+                    if (depValue?.role===`user`) {
                       return (
                         <>
                           <ProFormText

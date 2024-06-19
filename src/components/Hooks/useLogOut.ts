@@ -14,17 +14,10 @@ export default () => {
       const res = await appLogout({ name: currentUser?.name as string });
       if (res?.success) {
         callback && callback();
-        const { query = {}, pathname } = history.location;
-        const { redirect } = query;
         // Note: There may be security issues, please note
-        if (window.location.pathname !== '/user/login' && !redirect) {
-          history.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: pathname,
-            }),
-          });
-        }
+        history.replace({
+          pathname: '/user/login',
+        });
       }
     } finally {
       localStorage.removeItem('token');

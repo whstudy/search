@@ -20,16 +20,20 @@
   {
     path: '/',
     name: 'main',
+    component: './main',
     layout: false,
     hideInMenu: false,
     hideNav: false,
     routes: [
       {
-        path: '/',
-        component: './main',
-        access: 'normalRoute',
-        deployMode: ['tfs', 'tos'],
-        exact: true,
+        path: '/search',
+        name: 'search',
+        component: './main/search',
+      },
+      {
+        path: '/cluster',
+        name: 'cluster',
+        component: './main/cluster',
       },
     ],
   },

@@ -8,7 +8,7 @@ import LnHeader from '@/components/Header';
 const { Header, Sider, Content } = Layout;
 const { Step } = Steps;
 
-const Index: React.FC = () => {
+const Index: React.FC = (props) => {
 
   return (
     <>
@@ -25,7 +25,7 @@ const Index: React.FC = () => {
           <LnHeader />
         </Header>
         <Layout>
-          <Content className={styles.wizardContent}><Search /></Content>
+          <Content className={styles.wizardContent}>{props.children}</Content>
         </Layout>
       </Layout>
     </>
