@@ -37,12 +37,6 @@
       },
     ],
   },
-  {
-    path: 'welcome',
-    component: './Welcome',
-    deployMode: ['tfs', 'tos'],
-    hideInMenu: true,
-  },
   // 404
   {
     component: './404',
