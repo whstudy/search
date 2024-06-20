@@ -86,7 +86,7 @@ const SearchList = (props) => {
 
   const getBucket = async () => {
     const bucketListTemp: any = []
-    const bucketRes: any = await appBucketListGet({}, {});
+    const bucketRes: any = await appBucketListGet({});
     for (let i = 0; i < bucketRes.data.length; i++) {
       bucketListTemp.push({
         label: `${bucketRes.data[i].name}${bucketRes.data[i].owner?`（租户：${bucketRes.data[i].owner}）`:''}`,

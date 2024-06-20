@@ -7,7 +7,6 @@ import { ReactComponent as DemoIcon } from '@/assets/svg/data-circle.svg';
 import logo from '@/assets/icons/icon-128x128.png';
 import IconFont from '@/components/IconFont';
 import RightSider from '@/components/RightSider';
-import RightDrawer from '@/components/RightDrawer';
 
 import DoubleConfirm from '@/components/DoubleConfirm';
 
@@ -103,14 +102,6 @@ export default (): React.ReactNode => {
       <Divider />
       <Button onClick={() => setVisibleDrawer(false)}>close RightDrawer</Button>
       <Button onClick={() => setVisibleDrawer(true)}>open RightDrawer</Button>
-      <RightDrawer
-        title={'title'}
-        visible={visibleDrawer}
-        onVisibleChange={(s: boolean) => setVisibleDrawer(s)}
-        footer={'footer'}
-      >
-        <h4>RightDrawer</h4>
-      </RightDrawer>
 
       <Divider />
       {/* <Access accessible={access.denied}>

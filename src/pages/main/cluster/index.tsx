@@ -8,7 +8,7 @@ import {
   Spin,
 } from 'antd';
 import { FormattedMessage } from 'umi';
-import React, { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './index.less';
 import {appKibanaAddressGet, appCertUpdate, appCertInfoGet} from '@/services/dsm/terraSearch';
 import ProCard from "@ant-design/pro-card";
