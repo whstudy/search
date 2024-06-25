@@ -242,7 +242,7 @@ const SearchList = (props) => {
                   <Input.Group compact>
                     <Form.Item name={'size_operator'} style={{marginBottom: 0}}>
                       <Select placeholder={'请选择'}>
-                        <Option value="gt">大于</Option>
+                        <Option value="gte">大于等于</Option>
                         <Option value="lte">小于等于</Option>
                       </Select>
                     </Form.Item>

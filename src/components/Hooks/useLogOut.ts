@@ -11,14 +11,14 @@ export default () => {
 
   const logout = async (callback?: () => void) => {
     try {
-      const res = await appUserLogout({ name: currentUser?.name as string });
-      if (res?.success) {
+      // const res = await appUserLogout({ name: currentUser?.name as string });
+      // if (res?.success) {
         callback && callback();
         // Note: There may be security issues, please note
         history.replace({
           pathname: '/user/login',
         });
-      }
+      // }
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
