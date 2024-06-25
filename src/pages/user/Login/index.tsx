@@ -75,7 +75,7 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        const user = {username: values?.username};
+        const user = {name: values?.username, role: values.role};
         const token = data!.token!;
         const licenseCluster = data?.license_cluster;
         const licenseNodes = data?.license_nodes;
@@ -90,7 +90,6 @@ const Login: React.FC = () => {
 
         const currentUser = {
           ...user,
-          name: user?.username,
           licenseCluster,
           licenseNodes,
         };
@@ -114,14 +113,7 @@ const Login: React.FC = () => {
         
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
-        const { query } = history.location;
-        const { redirect } = query as { redirect: string };
-        let redirectUrl = redirect; // 当从配置向导处退出登录，但集群已通过其他方式跳过配置向导时，不再进入配置向导
-        if(values.role === `user`){
-          history.push('/search');  
-        } else {
-          history.push('/cluster');
-        }
+        history.push('/');
         return;
       }
       // 如果失败去设置用户错误信息

@@ -1,4 +1,4 @@
-import { appLogout } from '@/services/dsm/terraSearch';
+import { appUserLogout } from '@/services/dsm/terraSearch';
 import { useModel, history } from 'umi';
 import { stringify } from 'querystring';
 
@@ -11,7 +11,7 @@ export default () => {
 
   const logout = async (callback?: () => void) => {
     try {
-      const res = await appLogout({ name: currentUser?.name as string });
+      const res = await appUserLogout({ name: currentUser?.name as string });
       if (res?.success) {
         callback && callback();
         // Note: There may be security issues, please note

@@ -1,15 +1,24 @@
-import React, { StrictMode } from 'react';
+import React, {StrictMode, useEffect} from 'react';
 import Search from './search'
 import styles from './index.less';
 import { Layout, Steps } from 'antd';
 // import { Header, Sider } from 'antd/lib/layout/layout';
 import LnHeader from '@/components/Header';
+import {history} from "@@/core/history";
 
 const { Header, Sider, Content } = Layout;
 const { Step } = Steps;
 
 const Index: React.FC = (props) => {
 
+  useEffect(()=>{
+    if(JSON.parse(localStorage.getItem('user')||`{}`)?.role === `user`){
+      history.push('/search');
+    } else {
+      history.push('/cluster');
+    }
+  }, [])
+  
   return (
     <>
       {/*<Header className={styles.headerwrapper}>

@@ -365,7 +365,7 @@ const SearchList = (props) => {
               ),
             },
             {
-              title: <FormattedMessage id="component.tableTitle.operation" defaultMessage="操作" />,
+              title: "操作",
               key: 'operation',
               render: (text, record) => (
                 <Space size="middle">
@@ -445,7 +445,7 @@ const SearchList = (props) => {
                 </Popover>
             },
             {
-              title: <FormattedMessage id="storage.gateways.createTime" defaultMessage="创建时间" />,
+              title: "创建时间",
               dataIndex: 'create_time',
               key: 'create_time',
               sorter: true,
