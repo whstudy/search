@@ -37,6 +37,10 @@
       },
     ],
   },
+  {
+    path: '/',
+    redirect: '/search',
+  },
   // 404
   {
     component: './404',

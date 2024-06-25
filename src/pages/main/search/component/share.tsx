@@ -32,7 +32,7 @@ const Share: React.FC<routeProps> = ({
           res.msg,
         );
       }
-      setShareLink(res.data)  
+      setShareLink(res.data.link)  
     }catch (error: any) {
       message.error(
         error,
@@ -86,7 +86,7 @@ const Share: React.FC<routeProps> = ({
               >
                 <Form.Item noStyle>
                   <Input.Group compact className={styles.shareTime}>
-                    <Form.Item name={'size'} initialValue={1} noStyle>
+                    <Form.Item name={'size'} initialValue={5} noStyle>
                       <Input className={styles.shareInput}/>
                     </Form.Item>
                     <Form.Item name={'unit'} initialValue={60} noStyle>

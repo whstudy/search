@@ -159,15 +159,15 @@ export async function appKibanaAddressGet(options?: { [key: string]: any }) {
   );
 }
 
-/** 用户登录 管理员或普通用户登录 POST /app/login/ */
-export async function appLogin(
+/** 用户登录 管理员或普通用户登录 POST /app/user/login/ */
+export async function appUserLogin(
   body: {
     /** 用户身份， 管理员-administrator，普通用户-user */
     role: string;
     /** 用户名 */
     username: string;
     /** 密码，使用base64编码后传递 */
-    password: string;
+    password?: string;
     /** 用户的access_key */
     access_key: string;
     /** 用户的secret_key,使用base64编码后传递 */
@@ -175,24 +175,21 @@ export async function appLogin(
   },
   options?: { [key: string]: any },
 ) {
-  return request<
+  return request<{ code?: string; msg?: string; data?: { token?: string } } & API.RequestExtend>(
+    '/app/user/login/',
     {
-      code?: string;
-      msg?: string;
-      data?: { username?: string; token?: string };
-    } & API.RequestExtend
-  >('/app/login/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
     },
-    data: body,
-    ...(options || {}),
-  });
+  );
 }
 
-/** 用户登出 管理员或普通用户登出 POST /app/logout/ */
-export async function appLogout(
+/** 用户登出 管理员或普通用户登出 POST /app/user/logout/ */
+export async function appUserLogout(
   body: {
     /** 用户名 */
     username: string;
@@ -200,7 +197,7 @@ export async function appLogout(
   options?: { [key: string]: any },
 ) {
   return request<{ code?: string; msg?: string; data?: Record<string, any> } & API.RequestExtend>(
-    '/app/logout/',
+    '/app/user/logout/',
     {
       method: 'POST',
       headers: {

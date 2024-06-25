@@ -578,7 +578,7 @@ paths:
                   msg: Get kibana address successfully
       security:
         - Authorization: []
-  /app/login/:
+  /app/user/login/:
     post:
       tags:
         - terra_search
@@ -586,7 +586,7 @@ paths:
       description: 管理员或普通用户登录
       operationId: user_login
       requestBody:
-        description: 管理员提供 身份、用户名、密码登录；普通用户提供身份、access_key、secret_key、用户名登录
+        description: 管理员提供 身份、用户名、密码登录；普通用户提供身份、access_key、secret_key、用户名登录(管理员登录时，password不是必填项)
         content:
           application/json:
             schema:
@@ -594,7 +594,6 @@ paths:
               required:
                 - role
                 - username
-                - password
                 - access_key
                 - secret_key
               properties:
@@ -648,10 +647,6 @@ paths:
                   data:
                     type: object
                     properties:
-                      username:
-                        type: string
-                        example: user1
-                        description: 用户名
                       token:
                         type: string
                         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
@@ -659,12 +654,11 @@ paths:
                 example:
                   code: '0'
                   data:
-                    username: user1
                     token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
                   msg: User login successfully
       security:
         - Authorization: []
-  /app/logout/:
+  /app/user/logout/:
     post:
       tags:
         - terra_search

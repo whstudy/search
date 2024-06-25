@@ -5,7 +5,7 @@ import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from '
 import * as Lodash from 'lodash';
 import { Base64 } from 'js-base64';
 import Footer from '@/components/Footer';
-import { appLogin } from '@/services/dsm/terraSearch';
+import { appUserLogin } from '@/services/dsm/terraSearch';
 
 import styles from './index.less';
 import { setLocale } from '@@/plugin-locale/localeExports';
@@ -61,12 +61,12 @@ const Login: React.FC = () => {
     localStorage.removeItem('deployRedirect');
     setSubmitting(true);
     try {
-      const result = await appLogin({
+      const result = await appUserLogin({
         role: values.role,
         username: values.username,
-        password: Base64.encode(values.password||``),
+        password: values.password&&Base64.encode(values.password),
         access_key: values.access_key,
-        secret_key: Base64.encode(values.secret_key||``),
+        secret_key: values.access_key&&Base64.encode(values.secret_key),
       });
       const { data } = result;
       if ((result as any).success) {
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        const user = {username: data?.username};
+        const user = {username: values?.username};
         const token = data!.token!;
         const licenseCluster = data?.license_cluster;
         const licenseNodes = data?.license_nodes;
@@ -294,7 +294,7 @@ const Login: React.FC = () => {
                               },
                             ]}
                           />
-                          <ProFormText
+                          <ProFormText.Password
                             name="secret_key"
                             placeholder={intl.formatMessage({
                               id: 'pages.login.SK.placeholder',
@@ -315,7 +315,7 @@ const Login: React.FC = () => {
                         </>
                       );
                     } else {
-                      return <ProFormText
+                      return <ProFormText.Password
                         name="password"
                         placeholder={intl.formatMessage({
                           id: 'pages.login.password.placeholder',

@@ -53,7 +53,7 @@ const SearchList = (props) => {
         res.msg,
       );
     }
-    setDataSource(res.data?.list)
+    setDataSource(res.data?.items)
     setTotal(res.data.total)
   }
 
@@ -67,10 +67,9 @@ const SearchList = (props) => {
     paramsObject = {
       ...paramsObject,
       ...values,
-      buckets: values?.bucket?.map(o=>{
-        const oArr = o.split('-')
-        return {owner: oArr[0] == 'null' ? null : oArr[0], name: oArr[1]}
-      }),
+      name_match: values.name&&values.name_match,
+      tags_match: values.tags&&values.tags.length!=0&&values.tags_match,
+      tags_relation: values.tags&&values.tags.length!=0&&values.tags_relation,
       name: values.name,
       size_operator: values.size_operator,
       unit: undefined,
@@ -87,10 +86,10 @@ const SearchList = (props) => {
   const getBucket = async () => {
     const bucketListTemp: any = []
     const bucketRes: any = await appBucketListGet({});
-    for (let i = 0; i < bucketRes.data.length; i++) {
+    for (let i = 0; i < bucketRes.data.buckets.length; i++) {
       bucketListTemp.push({
-        label: `${bucketRes.data[i].name}${bucketRes.data[i].owner?`（租户：${bucketRes.data[i].owner}）`:''}`,
-        value: `${bucketRes.data[i].owner}-${bucketRes.data[i].name}`,
+        label: bucketRes.data.buckets[i],
+        value: bucketRes.data.buckets[i],
       })
     }
     setBucketList(bucketListTemp)
@@ -98,7 +97,6 @@ const SearchList = (props) => {
 
   useEffect(() => {
     getBucket()
-    getDataSource()
   }, [])
 
   const shareObj = (record) => {
@@ -226,7 +224,7 @@ const SearchList = (props) => {
               onFinish={onFinish}
               form={form}
             >
-              <Form.Item label={'所属桶'} name={'bucket'}>
+              <Form.Item label={'所属桶'} name={'buckets'}>
                 <Select
                   size={'middle'}
                   mode="multiple"
@@ -261,12 +259,12 @@ const SearchList = (props) => {
                   <Input/>
                 </Form.Item>
 
-                <Form.Item name={'nameType'} initialValue={0}>
+                <Form.Item name={'name_match'} initialValue={`total`}>
                   <Select options={[
-                    {label: `分词匹配`, value: 0},
-                    {label: `完全匹配`, value: 1},
-                    {label: `前缀匹配`, value: 2},
-                    {label: `后缀匹配`, value: 3},
+                    // {label: `分词匹配`, value: `tokenizer`},
+                    {label: `完全匹配`, value: `total`},
+                    // {label: `前缀匹配`, value: `prefix`},
+                    // {label: `后缀匹配`, value: `suffix`},
                   ]}/>
                 </Form.Item>
                 
@@ -275,48 +273,51 @@ const SearchList = (props) => {
                 </Form.Item>
               </Space>
 
-              <Form.Item label="标签" name="tags">
-                <Form.List name="tags">
-                  {(tagsFields, tagsOpt) => (
-                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                      {tagsFields.map((tagsField) => (
-                        <Space key={tagsField.key}>
-                          <Form.Item noStyle name={[tagsField.name, 'key']}>
-                            <Input placeholder="键" />
-                          </Form.Item>
-                          <Form.Item noStyle name={[tagsField.name, 'value']}>
-                            <Input placeholder="值" />
-                          </Form.Item>
-                          <Button onClick={() => {
-                            tagsOpt.remove(tagsField.name);
-                          }}>删除</Button>
+              <div className={styles.tagDiv}>
+                <Form.Item label="标签" name="tags">
+                  <Form.List name="tags">
+                    {(tagsFields, tagsOpt) => (
+                      <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
+                        {tagsFields.map((tagsField) => (
+                          <Space key={tagsField.key}>
+                            <Form.Item noStyle name={[tagsField.name, 'key']}>
+                              <Input placeholder="键" />
+                            </Form.Item>
+                            <Form.Item noStyle name={[tagsField.name, 'value']}>
+                              <Input placeholder="值" />
+                            </Form.Item>
+                            <Button onClick={() => {
+                              tagsOpt.remove(tagsField.name);
+                            }}>删除</Button>
+                          </Space>
+                        ))}
+                        <Space>
+                          <Button style={{width: '100px'}} onClick={() => tagsOpt.add()} block>
+                            添加
+                          </Button>
                         </Space>
-                      ))}
-                      <Space>
-                        <Button style={{width: '100px'}} onClick={() => tagsOpt.add()} block>
-                          添加
-                        </Button>
-                        <Select
-                          defaultValue={'jack'}  
-                          options={[
-                          { value: 'jack', label: '分词匹配' },
-                          { value: 'lucy', label: 'Lucy' },
-                          { value: 'Yiminghe', label: 'yiminghe' },
-                          { value: 'disabled', label: 'Disabled', disabled: true },
-                        ]}/>
-                        <Select
-                          defaultValue={'jack'}
-                          options={[
-                          { value: 'jack', label: '或' },
-                          { value: 'lucy', label: 'Lucy' },
-                          { value: 'Yiminghe', label: 'yiminghe' },
-                          { value: 'disabled', label: 'Disabled', disabled: true },
-                        ]}/>
-                      </Space>
-                    </div>
-                  )}
-                </Form.List>
-              </Form.Item>
+                      </div>
+                    )}
+                  </Form.List>
+                </Form.Item>
+  
+                <Space className={styles.tagSelect}>
+                  <Form.Item noStyle name={'tags_match'} initialValue={`total`}>
+                    <Select options={[
+                      // {label: `分词匹配`, value: `tokenizer`},
+                      {label: `完全匹配`, value: `total`},
+                      // {label: `前缀匹配`, value: `prefix`},
+                      // {label: `后缀匹配`, value: `suffix`},
+                    ]}/>
+                  </Form.Item>
+                  <Form.Item noStyle name={'tags_relation'} initialValue={`and`}>
+                    <Select options={[
+                      {label: `与`, value: `and`},
+                      {label: `或`, value: `or`},
+                    ]}/>
+                  </Form.Item>
+                </Space>
+              </div>
               
               <Space className={styles.btnGroup}>
                 <Form.Item>
@@ -406,27 +407,13 @@ const SearchList = (props) => {
               ),
             },
             {
-              title: '租户名',
-              dataIndex: 'owner',
-              key: 'owner',
-              sortDirections: ['descend', 'ascend'],
-              render: (text, record) => {
-                const ownerName = text.split('$').length == 2 ? text.split('$')[0] : 'N/A'
-                return (<div className={styles.tableNameTitle}>
-                  <span title={ownerName} className={styles.gatewaysNameSpan}>
-                    {ownerName}
-                  </span>
-                </div>)
-              },
-            },
-            {
               title: '用户名',
               dataIndex: 'owner',
               key: 'owner',
-              sorter: true,
-              sortDirections: ['descend', 'ascend'],
+              /*sorter: true,
+              sortDirections: ['descend', 'ascend'],*/
               render: (text, record) => {
-                const ownerName = text.split('$').length == 2 ? text.split('$')[1] : text
+                const ownerName = text.split('$').length == 2 ? `${text.split('$')[1]}(租户名：${text.split('$')[0]})` : text
                 return (<div className={styles.tableNameTitle}>
                   <span title={ownerName} className={styles.gatewaysNameSpan}>
                     {ownerName}
@@ -443,8 +430,8 @@ const SearchList = (props) => {
             },
             {
               title: '标签',
-              dataIndex: 'tag',
-              key: 'tag',
+              dataIndex: 'tags',
+              key: 'tags',
               render: (val: any) =>
                 /*<Tooltip placement="top" defaultOpen={true} title={<div className={styles.tagContainer}>
                   {val?.map(tag => <span className={styles.tag}>{tag}</span>)}
@@ -452,9 +439,9 @@ const SearchList = (props) => {
                   <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Tooltip>*/
                 <Popover placement="top" content={<div className={styles.tagContainer}>
-                  {val?.map((tag, index) => <span key={index} title={tag} className={styles.tag}>{tag}</span>)}
+                  {val?.map((tag, index) => <span key={index} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}
                 </div>}>
-                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} title={tag} className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
+                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Popover>
             },
             {
