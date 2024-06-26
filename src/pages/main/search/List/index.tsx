@@ -10,7 +10,8 @@ import {
   Select,
   Modal,
   Tooltip,
-  Popover
+  Popover,
+  InputNumber
 } from 'antd';
 import { FormattedMessage } from 'umi';
 import React, { useRef, useState, useEffect } from 'react';
@@ -67,8 +68,9 @@ const SearchList = (props) => {
     paramsObject = {
       ...paramsObject,
       ...values,
-      name_match: values.name&&values.name_match,
-      tags_match: values.tags&&values.tags.length!=0&&values.tags_match,
+      name_match: values.name_match,
+      tags: values?.tags?.filter((o)=>{return o.key&&o.value}),
+      tags_match: values.tags_match,
       tags_relation: values.tags&&values.tags.length!=0&&values.tags_relation,
       name: values.name,
       size_operator: values.size_operator,
@@ -120,6 +122,7 @@ const SearchList = (props) => {
       setCurrent(1)
     }else{
       paramsObject.page = pagination.current
+      paramsObject.page_size = pagination.pageSize
       setCurrent(pagination.current)
     }
     getDataSource()
@@ -222,6 +225,9 @@ const SearchList = (props) => {
           <Space className={styles.searchForm}>
             <Form
               onFinish={onFinish}
+              initialValues={
+                {tags: [{value: ``, label: ``}]}
+              }
               form={form}
             >
               <Form.Item label={'所属桶'} name={'buckets'}>
@@ -247,7 +253,7 @@ const SearchList = (props) => {
                       </Select>
                     </Form.Item>
                     <Form.Item name={'size'} style={{marginBottom: 0}}>
-                      <Input />
+                      <InputNumber min={1} />
                     </Form.Item>
                     <Form.Item name={'unit'} initialValue={1} style={{marginBottom: 0}}>
                       <Select options={unitOptions}/>
@@ -286,21 +292,22 @@ const SearchList = (props) => {
                             <Form.Item noStyle name={[tagsField.name, 'value']}>
                               <Input placeholder="值" />
                             </Form.Item>
-                            <Button onClick={() => {
+                            {tagsFields.length < 10 && <a onClick={() => tagsOpt.add()}>添加</a>}
+                            {tagsFields.length > 1 && <a onClick={() => {
                               tagsOpt.remove(tagsField.name);
-                            }}>删除</Button>
+                            }}>删除</a>}
                           </Space>
                         ))}
-                        <Space>
+                        {/*<Space>
                           <Button style={{width: '100px'}} onClick={() => tagsOpt.add()} block>
                             添加
                           </Button>
-                        </Space>
+                        </Space>*/}
                       </div>
                     )}
                   </Form.List>
                 </Form.Item>
-  
+
                 <Space className={styles.tagSelect}>
                   <Form.Item noStyle name={'tags_match'} initialValue={`total`}>
                     <Select options={[
@@ -438,7 +445,7 @@ const SearchList = (props) => {
                 </div>}>
                   <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Tooltip>*/
-                <Popover placement="top" content={<div className={styles.tagContainer}>
+                <Popover placement="top" content={<div className={styles.tagContainer} defaultVisible={true}>
                   {val?.map((tag, index) => <span key={index} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}
                 </div>}>
                   <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
@@ -453,7 +460,6 @@ const SearchList = (props) => {
             },
           ]}
           pagination={{
-            pageSize: 10,
             total: total,
             current: current,
           }}

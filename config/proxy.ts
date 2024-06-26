@@ -63,6 +63,8 @@ const target = 'https://mock.apipark.cn/m1/1459334-0-default/'; // product BVT
 
 // const target = 'http://10.128.101.104:9098/'; // product BVT
 
+// const target = 'http://10.129.0.127:9098/'; // product BVT
+
 export default {
   dev: {
     '/app/': {
