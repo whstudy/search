@@ -114,7 +114,7 @@ const Share: React.FC<routeProps> = ({
                 </Form.Item>
               </Form>
 
-              <span>天后失效</span>
+              <span>后失效</span>
             </span>
             <div className={styles.shareLink}>{shareLink}</div>
             <Typography.Paragraph

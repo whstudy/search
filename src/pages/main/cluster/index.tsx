@@ -3,6 +3,7 @@ import {
   Button,
   Form,
   Input,
+  InputNumber,
   message,
   Space,
   Spin,
@@ -45,7 +46,7 @@ const SearchList = (props) => {
         const res: any = await appCertUpdate({ ...values, cert_name: values.cert_name?.[0]?.name, cert_data: e?.target?.result  });
         console.log(res)
         if ((res as any).success) {
-          message.success(res?.msg);
+          message.success(`提交成功`);
           return true;
         }
         message.error(res?.msg);
@@ -100,12 +101,20 @@ const SearchList = (props) => {
               form={form}
             >
 
-              <Form.Item label={' 存储集群业务访问域名'} name={'domain'}>
+              <Form.Item label={' 存储集群业务访问域名'} name={'domain'} rules={[
+                {
+                  required: true,
+                }
+              ]}>
                 <Input/>
               </Form.Item>
 
-              <Form.Item label={'HTTPS端口'} name={'port'}>
-                <Input/>
+              <Form.Item label={'HTTPS端口'} name={'port'} rules={[
+                {
+                  required: true,
+                }
+              ]}>
+                <InputNumber/>
               </Form.Item>
 
               <Form.Item hidden name={'cert_data'}>

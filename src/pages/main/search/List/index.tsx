@@ -49,7 +49,7 @@ const SearchList = (props) => {
 
   const getDataSource = async () => {
     const res: any = await appObjectPage(paramsObject, {});
-    if(res.code === '2'){
+    if(res.code !== '0'){
       message.error(
         res.msg,
       );
@@ -246,7 +246,7 @@ const SearchList = (props) => {
               <Space>
                 <Form.Item label={'对象大小'}>
                   <Input.Group compact>
-                    <Form.Item name={'size_operator'} style={{marginBottom: 0}}>
+                    <Form.Item name={'size_operator'} style={{marginBottom: 0}} initialValue={`gte`}>
                       <Select placeholder={'请选择'}>
                         <Option value="gte">大于等于</Option>
                         <Option value="lte">小于等于</Option>

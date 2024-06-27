@@ -272,17 +272,12 @@ const Login: React.FC = () => {
                             // }}
                             placeholder={intl.formatMessage({
                               id: 'pages.login.AK.placeholder',
-                              defaultMessage: '请输入AK',
+                              defaultMessage: '',
                             })}
                             rules={[
                               {
                                 required: true,
-                                message: (
-                                  <FormattedMessage
-                                    id="pages.login.password.required"
-                                    defaultMessage="请输入密码！"
-                                  />
-                                ),
+                                message: `请输入AK`,
                               },
                             ]}
                           />
@@ -295,12 +290,7 @@ const Login: React.FC = () => {
                             rules={[
                               {
                                 required: true,
-                                message: (
-                                  <FormattedMessage
-                                    id="pages.login.password.required"
-                                    defaultMessage="请输入密码！"
-                                  />
-                                ),
+                                message: `请输入SK`,
                               },
                             ]}
                           />
