@@ -284,7 +284,7 @@ const SearchList = (props) => {
                   <Form.List name="tags">
                     {(tagsFields, tagsOpt) => (
                       <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                        {tagsFields.map((tagsField) => (
+                        {tagsFields.map((tagsField, index) => (
                           <Space key={tagsField.key}>
                             <Form.Item noStyle name={[tagsField.name, 'key']}>
                               <Input placeholder="键" />
@@ -292,10 +292,10 @@ const SearchList = (props) => {
                             <Form.Item noStyle name={[tagsField.name, 'value']}>
                               <Input placeholder="值" />
                             </Form.Item>
-                            {tagsFields.length < 10 && <a onClick={() => tagsOpt.add()}>添加</a>}
                             {tagsFields.length > 1 && <a onClick={() => {
                               tagsOpt.remove(tagsField.name);
                             }}>删除</a>}
+                            {( tagsFields.length < 10 && index + 1 === tagsFields.length ) && <a onClick={() => tagsOpt.add()}>添加</a>}
                           </Space>
                         ))}
                         {/*<Space>
@@ -446,9 +446,9 @@ const SearchList = (props) => {
                   <div>{val?.slice(0, 2).map(tag => <span className={styles.tag}>{tag}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Tooltip>*/
                 <Popover placement="top" content={<div className={styles.tagContainer} defaultVisible={true}>
-                  {val?.map((tag, index) => <span key={index} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}
+                  {val?.map((tag, index) => <span key={index} className={styles.tag}>{tag.key}:{tag.value}</span>)}
                 </div>}>
-                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} title={`${tag.key}:${tag.value}`} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
+                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Popover>
             },
             {

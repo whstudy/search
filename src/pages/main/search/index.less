@@ -39,7 +39,7 @@
   position: relative;
   .tagSelect {
     position: relative;
-    bottom: 0px;
+    bottom: 16px;
     left: 40px;
   }
 }
@@ -446,20 +446,24 @@
   align-items: space-around;
   .tag {
     margin: 3px 3px;
+    word-break: break-all;
+    white-space: normal;
+    max-width: unset;
   }
 }
 
 .tagContainerTable {
   display: flex;
   align-items: center;
+  width: fit-content;
 }
 
 .tag {
   display: inline-block;
-  white-space: pre-wrap;
-  //max-width: 96px;
-  //overflow: hidden;
-  //text-overflow: ellipsis;
+  max-width: 96px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   background: #D9D9D91A;
   border: 1px solid #323C4840;
   border-radius: 80px;

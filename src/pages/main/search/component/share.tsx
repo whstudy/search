@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import styles from '../index.less';
-import {Form, Input, message, Select, Space, Spin, Typography} from "antd";
+import {Form, Input, InputNumber, message, Select, Space, Spin, Typography} from "antd";
 import {appObjectShareLinkGet} from "@/services/dsm/terraSearch";
+import {FormattedMessage} from "umi";
 
 type routeProps = {
   objParams: any;
@@ -19,6 +20,18 @@ const Share: React.FC<routeProps> = ({
   const [loading, setLoading] = useState<any>();
   
   const getShareLink = async (e, allFields) => {
+    if (!(allFields.size*allFields.unit)) {
+      message.error(
+        `请输入时间`
+      );
+      return
+    }
+    if (allFields.size*allFields.unit>604800) {
+      message.error(
+        `最小1分钟，最大7天`
+      );
+      return
+    }
     setLoading(true);
     console.log(allFields)
     const _objParams = {
@@ -86,8 +99,13 @@ const Share: React.FC<routeProps> = ({
               >
                 <Form.Item noStyle>
                   <Input.Group compact className={styles.shareTime}>
-                    <Form.Item name={'size'} initialValue={5} noStyle>
-                      <Input className={styles.shareInput}/>
+                    <Form.Item name={'size'} initialValue={5} noStyle rules={[
+                      {
+                        required: true,
+                        message: `请输入时间`,
+                      },
+                    ]}>
+                      <InputNumber className={styles.shareInput} min={1}/>
                     </Form.Item>
                     <Form.Item name={'unit'} initialValue={60} noStyle>
                       <Select options={unitOptions}/>
