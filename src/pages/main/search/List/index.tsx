@@ -196,6 +196,7 @@ const SearchList = (props) => {
       if ([`text/html; charset=utf-8`, `application/json; charset=utf-8`, `application/json`].includes(result.headers.get('Content-Type'))) {
         const res = await result.json();
         message.error(res.msg)
+        // message.error(`${record.name}(${res.msg})`)
       } else {
         const blob = await result.blob();
         const fileName = `${record.name}`;
