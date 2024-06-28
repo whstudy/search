@@ -222,7 +222,7 @@ const SearchList = (props) => {
         }
       >
         <div>
-          <Space className={styles.searchForm}>
+          <Space className={styles.searchForm} size={'large'}>
             <Form
               onFinish={onFinish}
               initialValues={
@@ -230,20 +230,22 @@ const SearchList = (props) => {
               }
               form={form}
             >
-              <Form.Item label={'所属桶'} name={'buckets'}>
-                <Select
-                  size={'middle'}
-                  mode="multiple"
-                  allowClear
-                  style={{ width: '100%' }}
-                  placeholder="请选择所属桶"
-                  // defaultValue={['a10', 'c12']}
-                  onChange={handleChange}
-                  options={bucketList}
-                />
-              </Form.Item>
+              <div className={styles.bucketSpace}>
+                <Form.Item label={'所属桶'} name={'buckets'} className={styles.bucket}>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: '100%' }}
+                    placeholder="请输入筛选条件后，选择所属桶"
+                    // defaultValue={['a10', 'c12']}
+                    onChange={handleChange}
+                    options={bucketList}
+                  />
+                </Form.Item>
+                <Button onClick={getBucket}>刷新桶</Button>
+              </div>
   
-              <Space>
+              <div className={styles.twoSpace}>
                 <Form.Item label={'对象大小'}>
                   <Input.Group compact>
                     <Form.Item name={'size_operator'} style={{marginBottom: 0}} initialValue={`gte`}>
@@ -261,23 +263,25 @@ const SearchList = (props) => {
                   </Input.Group>
                 </Form.Item>
 
-                <Form.Item label={'对象名称'} name={'name'}>
-                  <Input/>
-                </Form.Item>
+                <Space>
+                  <Form.Item label={'对象名称'} name={'name'}>
+                    <Input/>
+                  </Form.Item>
 
-                <Form.Item name={'name_match'} initialValue={`total`}>
-                  <Select options={[
-                    // {label: `分词匹配`, value: `tokenizer`},
-                    {label: `完全匹配`, value: `total`},
-                    // {label: `前缀匹配`, value: `prefix`},
-                    // {label: `后缀匹配`, value: `suffix`},
-                  ]}/>
-                </Form.Item>
+                  <Form.Item name={'name_match'} initialValue={`total`}>
+                    <Select options={[
+                      // {label: `分词匹配`, value: `tokenizer`},
+                      {label: `完全匹配`, value: `total`},
+                      // {label: `前缀匹配`, value: `prefix`},
+                      // {label: `后缀匹配`, value: `suffix`},
+                    ]}/>
+                  </Form.Item>
+                </Space>
                 
                 <Form.Item label={'创建时间'} name={'time'}>
                   <RangePicker showTime={true}/>
                 </Form.Item>
-              </Space>
+              </div>
 
               <div className={styles.tagDiv}>
                 <Form.Item label="标签" name="tags">
