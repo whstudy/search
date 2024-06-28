@@ -30,7 +30,7 @@ const Index: React.FC = (props) => {
       </PageContainer>*/}
 
       <Layout className={styles.searchBody}>
-        <Header className={styles.headerwrapper}>
+        <Header>
           <LnHeader />
         </Header>
         <Layout>

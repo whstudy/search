@@ -189,14 +189,26 @@ const SearchList = (props) => {
         {
           name: record.name,
           bucket: record.bucket,
-          owner: record.owner,
         },
-{ parseResponse: false }
+        { parseResponse: false }
       );
-
-      const blob = await result.blob();
-      const fileName = `${record.name}`;
-      saveAs(blob, fileName);
+      if (result.headers.get('Content-Type') === `application/json`) {
+        const res = await result.json();
+        message.error(res.msg)
+      } else {
+        const blob = await result.blob();
+        const fileName = `${record.name}`;
+        saveAs(blob, fileName);
+      }
+    }
+  }
+  
+  const addTag = (tagsOpt, index) => {
+    console.log(form.getFieldsValue().tags)
+    if (form.getFieldsValue().tags[index].value&&form.getFieldsValue().tags[index].key) {
+      tagsOpt.add()   
+    } else {
+      message.error(`请先填写标签，再添加新标签`)
     }
   }
   
@@ -226,7 +238,7 @@ const SearchList = (props) => {
             <Form
               onFinish={onFinish}
               initialValues={
-                {tags: [{value: ``, label: ``}]}
+                {tags: [{key: ``, value: ``}]}
               }
               form={form}
             >
@@ -246,21 +258,41 @@ const SearchList = (props) => {
               </div>
   
               <div className={styles.twoSpace}>
-                <Form.Item label={'对象大小'}>
+                {/*<Form.Item label={'对象大小'}>
                   <Input.Group compact>
-                    <Form.Item name={'size_operator'} style={{marginBottom: 0}} initialValue={`gte`}>
+                    <Form.Item noStyle name={'size_operator'} initialValue={`gte`}>
                       <Select placeholder={'请选择'}>
                         <Option value="gte">大于等于</Option>
                         <Option value="lte">小于等于</Option>
                       </Select>
                     </Form.Item>
-                    <Form.Item name={'size'} style={{marginBottom: 0}}>
+                    <Form.Item noStyle name={'size'}>
                       <InputNumber min={1} />
                     </Form.Item>
-                    <Form.Item name={'unit'} initialValue={1} style={{marginBottom: 0}}>
+                    <Form.Item noStyle name={'unit'} initialValue={1}>
                       <Select options={unitOptions}/>
                     </Form.Item>
                   </Input.Group>
+                </Form.Item>*/}
+
+                <Form.Item label={'对象大小'}>
+                    <Form.Item
+                       name={'size'}>
+                      <InputNumber                      
+                        addonBefore={
+                          <Form.Item noStyle name={'size_operator'} initialValue={`gte`}>
+                            <Select placeholder={'请选择'}>
+                              <Option value="gte">大于等于</Option>
+                              <Option value="lte">小于等于</Option>
+                            </Select>
+                          </Form.Item>
+                        }
+                        addonAfter={
+                          <Form.Item noStyle name={'unit'} initialValue={1}>
+                            <Select options={unitOptions}/>
+                          </Form.Item>
+                        }  min={1} />
+                    </Form.Item>
                 </Form.Item>
 
                 <Space>
@@ -299,7 +331,7 @@ const SearchList = (props) => {
                             {tagsFields.length > 1 && <a onClick={() => {
                               tagsOpt.remove(tagsField.name);
                             }}>删除</a>}
-                            {( tagsFields.length < 10 && index + 1 === tagsFields.length ) && <a onClick={() => tagsOpt.add()}>添加</a>}
+                            {( tagsFields.length < 10 && index + 1 === tagsFields.length ) && <a onClick={() => addTag(tagsOpt, index)}>添加</a>}
                           </Space>
                         ))}
                         {/*<Space>

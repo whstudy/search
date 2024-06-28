@@ -19,6 +19,14 @@ export async function appObjectPage(
     start_time: string;
     /** 时间范围-结束时间 */
     end_time: string;
+    /** 页码 */
+    page: number;
+    /** 每页大小 */
+    page_size: number;
+    /** 正序还是倒序, 正序-asc, 倒序-desc */
+    order: string;
+    /** 要排序的字段, create_time size  name  bucket owner 五个 */
+    sort_field: string;
     /** 标签键值对 */
     tags: { key?: string; value?: string }[];
     /** 标签的匹配模式，，分词匹配-tokenizer，完全匹配-total，前缀匹配-prefix，后缀匹配-suffix */
@@ -57,8 +65,10 @@ export async function appObjectPage(
 export async function appObjectDownloadGet(
   params?: {
     // query
-    /** 对象的id */
-    id?: any;
+    /** 对象的名称 */
+    name?: any;
+    /** 所属桶的名称 */
+    bucket?: any;
   },
   options?: { [key: string]: any },
 ) {
@@ -78,8 +88,10 @@ export async function appObjectDownloadGet(
 export async function appObjectShareLinkGet(
   params?: {
     // query
-    /** 对象id */
-    id?: any;
+    /** 对象的名称 */
+    name?: any;
+    /** 所属桶的名称 */
+    bucket?: any;
     /** 链接有效期，单位是s, 范围是60-604800 */
     duration?: any;
   },

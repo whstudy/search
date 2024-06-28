@@ -40,6 +40,10 @@ paths:
                 - tags
                 - tags_match
                 - tags_relation
+                - page
+                - page_size
+                - order
+                - sort_field
               properties:
                 buckets:
                   type: array
@@ -73,6 +77,22 @@ paths:
                   type: string
                   description: 时间范围-结束时间
                   example: '2023-12-22 14:00:11'
+                page:
+                  type: integer
+                  description: 页码
+                  example: 1
+                page_size:
+                  type: integer
+                  description: 每页大小
+                  example: 10
+                order:
+                  type: string
+                  description: '正序还是倒序, 正序-asc, 倒序-desc'
+                  example: asc
+                sort_field:
+                  type: string
+                  description: '要排序的字段, create_time size  name  bucket owner 五个'
+                  example: create_time
                 tags:
                   type: array
                   items:
@@ -203,9 +223,13 @@ paths:
           in: header
           description: 语言
           schema: {}
-        - name: id
+        - name: name
           in: query
-          description: 对象的id
+          description: 对象的名称
+          schema: {}
+        - name: bucket
+          in: query
+          description: 所属桶的名称
           schema: {}
       responses:
         '200':
@@ -230,7 +254,7 @@ paths:
                 properties:
                   code:
                     type: string
-                    description: '0,1,2'
+                    description: '1,2'
                   msg:
                     type: string
                     description: 成功或失败的描述
@@ -258,9 +282,13 @@ paths:
           in: header
           description: 语言
           schema: {}
-        - name: id
+        - name: name
           in: query
-          description: 对象id
+          description: 对象的名称
+          schema: {}
+        - name: bucket
+          in: query
+          description: 所属桶的名称
           schema: {}
         - name: duration
           in: query
