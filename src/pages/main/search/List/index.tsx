@@ -192,7 +192,8 @@ const SearchList = (props) => {
         },
         { parseResponse: false }
       );
-      if (result.headers.get('Content-Type') === `application/json`) {
+      console.log(result.headers.get('Content-Type'))
+      if ([`text/html; charset=utf-8`, `application/json; charset=utf-8`, `application/json`].includes(result.headers.get('Content-Type'))) {
         const res = await result.json();
         message.error(res.msg)
       } else {
@@ -484,7 +485,7 @@ const SearchList = (props) => {
                 <Popover placement="top" content={<div className={styles.tagContainer} defaultVisible={true}>
                   {val?.map((tag, index) => <span key={index} className={styles.tag}>{tag.key}:{tag.value}</span>)}
                 </div>}>
-                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map(tag => <span key={tag} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
+                  <div className={styles.tagContainerTable}>{val?.slice(0, 2).map((tag, index) => <span key={index} className={styles.tag}>{tag.key}:{tag.value}</span>)}{val?.length>2&&`· · ·`}</div>
                 </Popover>
             },
             {
